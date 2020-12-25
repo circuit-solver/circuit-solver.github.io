@@ -35,8 +35,7 @@ Computer is the foolest thing in the world, which blindly just processes the inp
   4. Double click the element Label to edit the value
   5. To name the node is optional unless there are controlling sources since we need to identify where controlling factor flows. After simulation, node numbering is automatically done to all the nodes.
 
-The top input box "ControlFactor" is the control factor of the element
-The input box in the left "High" represents the node high of the controlling element whereas the input box in the right "Low" represents the node low of the controlling element.
+
 ## Back-story
 We are currently in our sophomore year of study and have a course on electric circuits. When we first en-countered some large complicated circuits felt very hard to solve it by hand, since it involved large number of rigorous calcuations. So we just thought at that point of time that it would have been better if there were some software that would help us solve the circuit. So, we did a basic research of the avaialable softwares that help us to simulate the circuit. After our research we found that there are few such but their user interfaces aren't as good. In the similar way there are certain online tools that do provide solutions for some simple circuits without involving any controlled sources. After this research we came to knew about MNA (Modified Nodal Analysis) and its powerfull advantage being simpler to implement using a computer software, and then we started working from sratch on how to develop an end-end project, proposed a plan and then implemented it.
 
