@@ -80,7 +80,7 @@ input {
 
 .palette_node_element {
   border: 1px solid gray;
-  background-color: #484c7f;
+  background-color: slateblue;
   padding: 10px;
   cursor: move;
   width: 120px;

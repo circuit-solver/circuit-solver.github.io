@@ -8,11 +8,11 @@ body {
 }
 body {
   font-family: "PT Sans", sans-serif !important;
-  background-color: #162447 !important;
+  background-color: lavender !important;
 }
-h4 {
+/* h4 {
   color: white !important ;
-}
+} */
 .feedback {
   max-width: 30rem;
   margin: 0 auto;
@@ -39,7 +39,7 @@ h4 {
   margin: 0 auto;
 }
 .about {
-  color: white;
+  /* color: white; */
   padding-top: 2%;
 }
 .logo {
@@ -53,5 +53,5 @@ h4 {
 }
 
 nav {
-  background-color: #151965;
+  background-color: #3f92d2;
 }
