@@ -1,0 +1,21 @@
+body {
+  font-family: "PT Sans", sans-serif !important;
+}
+
+.desc {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  max-width: 40rem;
+  padding-top: 50px;
+}
+.btn-green {
+  background-color: #65ff8f !important;
+  width: 300px !important;
+  margin: 0 auto;
+}
+
+h4 {
+  color: white !important ;
+}

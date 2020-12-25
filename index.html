@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resistive Circuit Solver</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.3.0/math.min.js"></script>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="icon" href="css/icons/microchip.png" type="image/icon type" />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div style="background-color: #3f92d2; padding-bottom: 50px">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="index.html"
+          ><h4>Resistive circuit solver</h4></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html"><h5>Home</h5></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="./screens/start.html"
+                ><h5>Editor</h5></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./screens/contact.html"
+                ><h5>Contact</h5></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./screens/feedback.html"
+                ><h5>Feedback</h5></a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="desc" style="padding-top: 4%">
+        <h1
+          style="color: lawngreen"
+          class="animate__animated animate__zoomInDown"
+        >
+          Short your Time<img src="css/icons/icons8-happy-64.png" /><br />
+          We open your answer
+        </h1>
+        <h4
+          class="lead animate__animated animate__fadeInLeft"
+          style="padding-top: 5%"
+        >
+          Fed up of solving complex circuits with tons of bridges and pillars or
+          too lazy even to solve a simple circuit. Fret Not! Check out our super
+          cool circuit solver that could solve any kind of resistive circuit.
+          Excited to check it out!!!
+        </h4>
+        <p>
+          <a
+            class="btn btn-green btn-lg animate__animated animate__fadeInRightBig"
+            style="margin-top: 5%"
+            href="./screens/start.html"
+            role="button"
+            >Get Started</a
+          >
+        </p>
+        <div>
+          <a
+            class="animate__animated animate__fadeInLeft"
+            data-toggle="collapse"
+            href="#collapseExample"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+            style="color: lawngreen"
+          >
+            What can i do?
+          </a>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              Hi, thanks a lot for waking me up, it is my pleasure to help you
+              in solving a circuit for you. I can help you in solving any kind
+              of resistive circuit, there's no restriction on the elements that
+              it must contain. But please make sure that you are entering the
+              input in the correct fashion. Basically i am a fool but can do a
+              lot that you find difficult to do. Peace, it now the time to check
+              out me!!!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background-color: lavender">
+      <div class="card-group" style="margin: auto; max-width: 900px">
+        <div
+          class="card p-5"
+          style="background-color: lavender; border-width: 0"
+        >
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlvoSCRi0u6uEFfZToQ8iRKC9Nf7wvfJq3zg&usqp=CAU"
+            class="card-img-top"
+            alt="..."
+            style="margin: auto; width: 60%"
+          />
+          <div class="card-body">
+            <h3 class="card-title mt-5">Simulate</h3>
+            <h5 class="card-text">
+              Simulate any kind of circuit you have designed and get the results
+              instantly on just a single click.
+            </h5>
+          </div>
+        </div>
+        <div
+          class="card p-5"
+          style="background-color: lavender; border-width: 0"
+        >
+          <img
+            src="https://img.pngio.com/simulate-to-test-potential-changes-software-simulation-icon-simulate-png-820_403.png"
+            class="card-img-top"
+            alt="..."
+            style="margin: auto; height: 60%"
+          />
+          <div class="card-body">
+            <h3 class="card-title mt-3">Design</h3>
+            <h5 class="card-text">
+              Design your own custom circuit using the components given in the
+              palette in the web editor by simple drag and drop
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer style="background-color: aliceblue; padding-bottom: 20px;">
+    <h5 class="text-center py-3">
+      Open Source with &#10084 on <a href="">Github</a>
+    </h5>
+    <div style="display: flex; justify-content: space-around;">
+    <a href="./screens/contact.html" style=" color: gray !important;">Contact</a>
+  <a style=" color: gray !important;" href="#">Source Code</a></div>
+  </footer>
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

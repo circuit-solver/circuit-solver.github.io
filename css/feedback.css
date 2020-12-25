@@ -1,0 +1,57 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+}
+body {
+  font-family: "PT Sans", sans-serif !important;
+  background-color: #162447 !important;
+}
+h4 {
+  color: white !important ;
+}
+.feedback {
+  max-width: 30rem;
+  margin: 0 auto;
+}
+#alerts {
+  max-width: 8rem;
+}
+.desc {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  max-width: 40rem;
+  padding-top: 50px;
+}
+.profile {
+  width: 60%;
+  height: 60%;
+  margin: 5%;
+}
+.feedback {
+  max-width: 30rem;
+  width: 80%;
+  margin: 0 auto;
+}
+.about {
+  color: white;
+  padding-top: 2%;
+}
+.logo {
+  width: 10%;
+  height: 10%;
+}
+.btn-green {
+  background-color: #65ff8f !important;
+  width: 300px !important;
+  margin: 0 auto;
+}
+
+nav {
+  background-color: #151965;
+}

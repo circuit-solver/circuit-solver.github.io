@@ -1,0 +1,260 @@
+<!-- Editor page -->
+<html>
+  <head>
+    <title>Resistive Circuit Solver</title>
+    <meta charset="UTF-8" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="../css/aristo/jquery-ui-1.8.16.custom.css"
+    />
+    <link type="text/css" rel="stylesheet" href="../css/jquery.layout.css" />
+    <link type="text/css" rel="stylesheet" href="../css/application.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" href="../css/icons/microchip.png" type="image/icon type" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.3.0/math.min.js"></script>
+    <script src="../src/gui/dragdrop.js"></script>
+    <script src="../src/lib/jquery.js"></script>
+    <script src="../src/lib/jquery-ui.js"></script>
+    <script src="../src/lib/jquery.browser.js"></script>
+    <script src="../src/lib/jquery.layout.js"></script>
+
+    <script src="../src/draw2d.js"></script>
+
+    <script src="../src/components/VoltageSource.js"></script>
+    <script src="../src/components/Resistor.js"></script>
+    <script src="../src/components/CurrentSource.js"></script>
+    <script src="../src/components/CCVS_Gen.js"></script>
+    <script src="../src/components/CCCS_Gen.js"></script>
+    <script src="../src/components/VCCS.js"></script>
+    <script src="../src/components/VCVS.js"></script>
+
+    <script src="../src/gui/Application.js"></script>
+    <script src="../src/gui/View.js"></script>
+    <script src="../src/gui/Toolbar.js"></script>
+  </head>
+
+  <body id="container">
+    <div id="navbar">
+      <nav class="navbar navbar-expand-lg navbar-dark navbar-expand">
+        <a class="navbar-brand" href="../index.html"
+          ><h3>Resistive circuit solver</h3></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><h5>Home</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link show-docs"><h5>Docs</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="start.html"><h5>Editor</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html"><h5>Contact</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="feedback.html"><h5>Feedback</h5></a>
+            </li>
+            <!-- <button class="show" aria-haspopup="true">Show Modal</button> -->
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div id="content">
+      <div
+        id="toolbar"
+        class="navbar sticky-top navbar-expand-lg navbar-dark"
+      ></div>
+
+      <div
+        id="canvas"
+        draggable="true"
+        style="width: 3000px; height: 3000px"
+      ></div>
+    </div>
+
+    <div id="navigation" class="">
+      <h4 style="padding-top: 10%">COMPONENTS</h4>
+      <div
+        data-shape="Resistor"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        Resistor
+      </div>
+      <div
+        data-shape="CurrentSource"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        Current Src
+      </div>
+      <div
+        data-shape="VoltageSource"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        Voltage Src
+      </div>
+      <div
+        data-shape="VCCS"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        VCCS
+      </div>
+      <div
+        data-shape="VCVS"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        VCVS
+      </div>
+      <div
+        data-shape="CCCS_Gen"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        CCCS
+      </div>
+
+      <div
+        data-shape="CCVS_Gen"
+        draggable="true"
+        class="palette_node_element draw2d_droppable"
+      >
+        CCVS
+      </div>
+    </div>
+    <div class="mask" role="dialog"></div>
+    <div class="modal" id="svg" role="alert">
+      <button class="close" role="button">
+        <img
+          src="https://img.icons8.com/ios-glyphs/30/000000/macos-close.png"
+        />
+      </button>
+      <div
+        style="
+          overflow-y: auto !important;
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <img
+          class="shadow"
+          id="preview"
+          style="
+            border-radius: 5px;
+            background: white;
+            width: 600px;
+            height: 500px;
+            border: 3px solid gray;
+            margin-left: 15px;
+            overflow: hidden;
+          "
+        />
+
+        <div id="output"></div>
+      </div>
+      <button
+        class="btn btn-primary again btn-modal btn-lg px-5"
+        style="left: 15%"
+      >
+        Edit
+      </button>
+      <button
+        class="btn btn-primary btn-modal btn-lg"
+        onclick="window.location.reload()"
+        style="left: 35%"
+      >
+        Simulate Another
+      </button>
+    </div>
+    <div class="mask-docs" role="dialog"></div>
+
+    <div class="modal-docs" id="svg" role="alert">
+      <button class="close-docs" role="button">
+        <img
+          src="https://img.icons8.com/ios-glyphs/30/000000/macos-close.png"
+        />
+      </button>
+      <h1>Instructions</h1>
+      <ol>
+        <li>Drag and drop the elements from the left to the canvas</li>
+        <li>Double click the element to rotate 90 degrees</li>
+        <li>
+          Connection of ports:
+          <ul>
+            <li>
+              Click the ports from each element one after the other, it
+              automatically connects (OR)
+            </li>
+            <li>
+              You can drag from one port and drop to the destination port(doesnt
+              work on mobile browser)
+            </li>
+          </ul>
+        </li>
+        <li>Double click the element Label to edit the value</li>
+        <li>
+          To name the node is optional unless there are controlling sources
+          since we need to identify where controlling factor flows. After
+          simulation, node numbering is automatically done to all the nodes.
+        </li>
+        <li>
+          For controlling sources for example <br /><img
+            style="width: 200px"
+            src="../css/controlledcurrentsrc.png"
+            alt=""
+          />
+          <br />
+          The top input box "ControlFactor" is the control factor of the element
+          <br />
+          The input box in the left "High" represents the node high of the
+          controlling element whereas the input box in the right "Low"
+          represents the node low of the controlling element.
+        </li>
+      </ol>
+    </div>
+
+    <pre
+      id="json"
+      style="
+        overflow: auto;
+        position: absolute;
+        top: 100px;
+        right: 10px;
+        width: 350;
+        height: 500;
+        background: white;
+        border: 1px solid gray;
+      "
+    ></pre>
+    <script src="../src/index.js"></script>
+  </body>
+</html>

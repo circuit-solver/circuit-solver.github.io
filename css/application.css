@@ -1,0 +1,244 @@
+/* CSS for editor page */
+
+body {
+  font-family: "PT Sans", sans-serif !important;
+}
+
+input {
+  background: none repeat scroll 0 0 #f8f8f8;
+  border-color: #c6c6c6 #dadada #eaeaea;
+  border-radius: 4px 4px 4px 4px;
+  -moz-box-sizing: border-box;
+  padding-left: 7px;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: middle;
+  height: 25px;
+  font-size: 14px;
+  line-height: 25px;
+}
+
+#container {
+  padding: 0px;
+  margin: 0px;
+}
+
+#canvas {
+  padding: 0px;
+  margin: 0px;
+  background: url(./background.png);
+}
+
+#navigation {
+  padding: 0px;
+
+  text-align: center;
+  border-style: solid;
+  border-radius: 15px;
+  background: #f4eeed; /* Old browsers */
+}
+
+#toolbar {
+  background: #f4eeed; /* Old browsers */
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cecece', endColorstr='#a8a8a8',GradientType=0 ); /* IE6-9 */
+  padding: 8px;
+  margin: 0px;
+  height: 70px !important;
+  border-top: 1px solid #515151;
+
+  border-bottom: 1px solid #515151;
+}
+
+#propertypane {
+  padding: 0px;
+  margin: 0px;
+  width: 150px;
+  background-color: #7d7d7d;
+  border-top: 0px;
+}
+#navbar {
+  padding: 0;
+  margin: 0;
+  background-color: #0278ae;
+  height: 70px !important;
+}
+
+.property_container {
+  padding: 5px;
+  padding-bottom: 15px;
+}
+
+.toolbar_delimiter {
+  margin-left: 40px;
+}
+
+#content {
+  padding: 0px;
+  margin: 0px;
+}
+
+.palette_node_element {
+  border: 1px solid gray;
+  background-color: slateblue;
+  padding: 10px;
+  cursor: move;
+  width: 120px;
+  margin: 30px auto 30px auto;
+  text-align: center;
+  align-items: center;
+  border-radius: 15px;
+  color: white;
+}
+
+.shadow {
+  -moz-box-shadow: 3px 3px 4px #000;
+  -webkit-box-shadow: 3px 3px 4px #000;
+  box-shadow: 3px 3px 4px #000;
+  /* For IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+  /* For IE 5.5 - 7 */
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
+
+.show {
+  margin-left: 35px;
+  color: #fff;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+.show-docs {
+  color: #fff;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+/* // Close Button */
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35px;
+  height: 30px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 0;
+}
+.close-docs {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  border: 0;
+}
+
+/* // The mask */
+
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(52, 73, 94, 0.8);
+  z-index: 50;
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition: 0.7s;
+}
+.mask-docs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(52, 73, 94, 0.8);
+  z-index: 50;
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition: 0.7s;
+}
+
+/* // Modal */
+
+.modal {
+  /* top: 10% !important; */
+  width: 900px !important;
+  max-width: 70% !important;
+  max-height: 80% !important;
+  margin: auto !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: -150px; */
+  background: #d0e8f2;
+  z-index: 100;
+  visibility: hidden;
+
+  opacity: 0;
+  text-align: center;
+  transition: 0.5s ease-out;
+
+  transform: translateY(45px);
+  left: 10% !important;
+  right: 10% !important;
+  top: 10% !important;
+}
+.modal-docs {
+  width: 900px !important;
+  max-width: 70% !important;
+  max-height: 80% !important;
+  margin: auto !important;
+
+  padding: 15px;
+
+  background: white;
+  z-index: 100;
+  visibility: hidden;
+  position: fixed;
+  opacity: 0;
+  transition: 0.5s ease-out;
+
+  transform: translateY(45px);
+  left: 10% !important;
+  right: 10% !important;
+  top: 10% !important;
+}
+
+.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.active + .modal {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+.active + .modal-docs {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+#output {
+  padding-left: 10px;
+}
+
+.again {
+  display: block !important;
+}
+.btn-modal {
+  position: fixed;
+  top: 90%;
+}
