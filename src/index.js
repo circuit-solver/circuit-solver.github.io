@@ -74,7 +74,6 @@ var createConnection = function (sourcePort, targetPort) {
   return c;
 };
 
-var circuit = [];
 document.getElementById("json").style.display = "none";
 
 function displayJSON(canvas) {
@@ -109,433 +108,502 @@ function updatePreview(canvas) {
   );
 }
 
-function simulate() {
+class connection {
+  constructor(conn_id, label_id, label_text, src_node, tar_node) {
+    this.conn_id = conn_id;
+    this.label_id = label_id;
+    this.label_text = label_text;
+    this.src_node = src_node;
+    this.tar_node = tar_node;
+  }
+}
+class resistor {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    this.out_port_id = out_port_id;
+    this.label = label;
+    this.node_k = node_k;
+    this.node_l = node_l;
+    this.ele_code = 1;
+  }
+}
+class curr_src {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.ele_code = 2;
+  }
+}
+
+class volt_src {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.ele_code = 3;
+  }
+}
+
+class volt_cont_curr_src {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 4;
+  }
+}
+
+class volt_cont_volt_src {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 5;
+  }
+}
+
+class curr_cont_curr_src_gen {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 6;
+  }
+}
+
+class curr_cont_curr_src_vs {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 7;
+  }
+}
+
+class curr_cont_volt_src_gen {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 8;
+  }
+}
+
+class curr_cont_volt_src_vs {
+  constructor(
+    id,
+    label_id,
+    inp_port_id,
+    out_port_id,
+    label,
+    node_k,
+    node_l,
+    cont_high_node,
+    cont_low_node,
+    node_m,
+    node_n,
+
+    ele_code
+  ) {
+    this.id = id;
+    this.label_id = label_id;
+    this.inp_port_id = inp_port_id;
+    // ## Here inp_port is the low
+    this.out_port_id = out_port_id;
+    // ## Here out_port is the high
+    this.label = label;
+    this.node_k = node_k;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.node_l = node_l;
+    // ## The final node numbers to be used directly in our version 1 algo
+    this.cont_high_node = cont_high_node;
+    this.cont_low_node = cont_low_node;
+    this.node_m = node_m;
+    this.node_n = node_n;
+    this.m_changed = 0;
+    this.n_changed = 0;
+    this.ele_code = 9;
+  }
+}
+
+// Function for return element type from id
+function ret_type_from_id(id) {
+  return element_type_list[element_id_list.indexOf(id)];
+}
+
+// Function that returns the source and target nodes given id
+function ret_source_target_nodes_from_id(id, port_type) {
+  var ele_type = ret_type_from_id(id);
+  if (ele_type == "Resistor") {
+    for (var i = 0; i < resistor_list.length; i++) {
+      if (resistor_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return resistor_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return resistor_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "CurrentSource") {
+    for (var i = 0; i < curr_src_list.length; i++) {
+      if (curr_src_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return curr_src_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return curr_src_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "VoltageSource") {
+    for (var i = 0; i < volt_src_list.length; i++) {
+      if (volt_src_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return volt_src_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return volt_src_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "VCCS") {
+    for (var i = 0; i < vccs_list.length; i++) {
+      if (vccs_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return vccs_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return vccs_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "VCVS") {
+    for (var i = 0; i < vcvs_list.length; i++) {
+      if (vcvs_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return vcvs_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return vcvs_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "CCCS_Gen") {
+    for (var i = 0; i < cccs_gen_list.length; i++) {
+      if (cccs_gen_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return cccs_gen_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return cccs_gen_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "CCCS_Vs") {
+    for (var i = 0; i < cccs_vs_list.length; i++) {
+      if (cccs_vs_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return cccs_vs_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return cccs_vs_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "CCVS_Gen") {
+    for (var i = 0; i < ccvs_gen_list.length; i++) {
+      if (ccvs_gen_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return ccvs_gen_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return ccvs_gen_list[i].out_port_id;
+        }
+      }
+    }
+  } else if (ele_type == "CCVS_Vs") {
+    for (var i = 0; i < ccvs_vs_list.length; i++) {
+      if (ccvs_vs_list[i].id == id) {
+        if (port_type == "hybrid0") {
+          return ccvs_vs_list[i].inp_port_id;
+        } else if (port_type == "hybrid1") {
+          return ccvs_vs_list[i].out_port_id;
+        }
+      }
+    }
+  }
+}
+function return_node_num_from_port_id(port_id) {
+  for (var i = 0; i < nodes_list.length; i++) {
+    if (nodes_list[i][1].includes(port_id)) {
+      return nodes_list[i][0];
+    }
+  }
+}
+function ret_src_tar_node_from_conn_label(text) {
+  for (var i = 0; i < connection_list.length; i++) {
+    if (connection_list[i].label_text == text) {
+      return [connection_list[i].src_node, connection_list[i].tar_node];
+    }
+  }
+}
+function ret_node_m_or_n(text) {
+  var res = ret_src_tar_node_from_conn_label(text);
+  var p1 = return_node_num_from_port_id(res[0]);
+  var p2 = return_node_num_from_port_id(res[1]);
+  if (p1 == p2) {
+    return p1;
+  }
+}
+function generate_node_list() {
+  var nodes_list = [];
+  var added_list = [];
+  var cnt = 1;
+  connection_list.forEach((conn) => {
+    if (nodes_list.length == 0) {
+      nodes_list.push([0, [conn.src_node, conn.tar_node]]);
+      added_list.push(conn.src_node);
+      added_list.push(conn.tar_node);
+    } else if (
+      added_list.includes(conn.src_node) == false &&
+      added_list.includes(conn.tar_node)
+    ) {
+      nodes_list.forEach((n) => {
+        if (n[1].includes(conn.tar_node)) {
+          n[1].push(conn.src_node);
+          added_list.push(conn.src_node);
+        }
+      });
+    } else if (
+      added_list.includes(conn.tar_node) == false &&
+      added_list.includes(conn.src_node)
+    ) {
+      nodes_list.forEach((n) => {
+        if (n[1].includes(conn.src_node)) {
+          n[1].push(conn.tar_node);
+          added_list.push(conn.tar_node);
+        }
+      });
+    } else {
+      nodes_list.push([cnt, [conn.src_node, conn.tar_node]]);
+      added_list.push(conn.src_node);
+      added_list.push(conn.tar_node);
+      cnt += 1;
+    }
+  });
+  for (var i = 0; i < nodes_list.length; i++) {
+    for (var j = 0; j < nodes_list.length - i - 1; j++) {
+      if (nodes_list[j][1].length > nodes_list[j + 1][1].length) {
+        var temp = nodes_list[j];
+        nodes_list[j] = nodes_list[j + 1];
+        nodes_list[j + 1] = temp;
+      }
+    }
+  }
+  nodes_list.reverse();
+  for (var i = 0; i < nodes_list.length; i++) {
+    nodes_list[i][0] = i;
+  }
+  return nodes_list;
+}
+function nodeGenerate() {
+  // variable declaration
+  resistor_list = [];
+  curr_src_list = [];
+  volt_src_list = [];
+  vccs_list = [];
+  vcvs_list = [];
+  cccs_gen_list = [];
+  cccs_vs_list = [];
+  ccvs_gen_list = [];
+  ccvs_vs_list = [];
+
+  connection_list = [];
+  element_id_list = [];
+  element_type_list = [];
+  connection_id_list = [];
+  raw_nodes_list = [];
   circuit = document.getElementById("json").innerHTML;
   circuit = JSON.parse(circuit);
-
-  // functionining the classes for the connection, resistor, current source, voltage source, controlled voltage and controlled current source
-  class connection {
-    constructor(conn_id, label_id, label_text, src_node, tar_node) {
-      this.conn_id = conn_id;
-      this.label_id = label_id;
-      this.label_text = label_text;
-      this.src_node = src_node;
-      this.tar_node = tar_node;
-    }
-  }
-  class resistor {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      this.out_port_id = out_port_id;
-      this.label = label;
-      this.node_k = node_k;
-      this.node_l = node_l;
-      this.ele_code = 1;
-    }
-  }
-  class curr_src {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.ele_code = 2;
-    }
-  }
-
-  class volt_src {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.ele_code = 3;
-    }
-  }
-
-  class volt_cont_curr_src {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 4;
-    }
-  }
-
-  class volt_cont_volt_src {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 5;
-    }
-  }
-
-  class curr_cont_curr_src_gen {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 6;
-    }
-  }
-
-  class curr_cont_curr_src_vs {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 7;
-    }
-  }
-
-  class curr_cont_volt_src_gen {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 8;
-    }
-  }
-
-  class curr_cont_volt_src_vs {
-    constructor(
-      id,
-      label_id,
-      inp_port_id,
-      out_port_id,
-      label,
-      node_k,
-      node_l,
-      cont_high_node,
-      cont_low_node,
-      node_m,
-      node_n,
-
-      ele_code
-    ) {
-      this.id = id;
-      this.label_id = label_id;
-      this.inp_port_id = inp_port_id;
-      // ## Here inp_port is the low
-      this.out_port_id = out_port_id;
-      // ## Here out_port is the high
-      this.label = label;
-      this.node_k = node_k;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.node_l = node_l;
-      // ## The final node numbers to be used directly in our version 1 algo
-      this.cont_high_node = cont_high_node;
-      this.cont_low_node = cont_low_node;
-      this.node_m = node_m;
-      this.node_n = node_n;
-      this.m_changed = 0;
-      this.n_changed = 0;
-      this.ele_code = 9;
-    }
-  }
-
-  // Function for return element type from id
-  function ret_type_from_id(id) {
-    return element_type_list[element_id_list.indexOf(id)];
-  }
-
-  // Function that returns the source and target nodes given id
-  function ret_source_target_nodes_from_id(id, port_type) {
-    var ele_type = ret_type_from_id(id);
-    if (ele_type == "Resistor") {
-      for (var i = 0; i < resistor_list.length; i++) {
-        if (resistor_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return resistor_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return resistor_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "CurrentSource") {
-      for (var i = 0; i < curr_src_list.length; i++) {
-        if (curr_src_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return curr_src_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return curr_src_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "VoltageSource") {
-      for (var i = 0; i < volt_src_list.length; i++) {
-        if (volt_src_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return volt_src_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return volt_src_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "VCCS") {
-      for (var i = 0; i < vccs_list.length; i++) {
-        if (vccs_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return vccs_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return vccs_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "VCVS") {
-      for (var i = 0; i < vcvs_list.length; i++) {
-        if (vcvs_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return vcvs_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return vcvs_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "CCCS_Gen") {
-      for (var i = 0; i < cccs_gen_list.length; i++) {
-        if (cccs_gen_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return cccs_gen_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return cccs_gen_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "CCCS_Vs") {
-      for (var i = 0; i < cccs_vs_list.length; i++) {
-        if (cccs_vs_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return cccs_vs_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return cccs_vs_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "CCVS_Gen") {
-      for (var i = 0; i < ccvs_gen_list.length; i++) {
-        if (ccvs_gen_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return ccvs_gen_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return ccvs_gen_list[i].out_port_id;
-          }
-        }
-      }
-    } else if (ele_type == "CCVS_Vs") {
-      for (var i = 0; i < ccvs_vs_list.length; i++) {
-        if (ccvs_vs_list[i].id == id) {
-          if (port_type == "hybrid0") {
-            return ccvs_vs_list[i].inp_port_id;
-          } else if (port_type == "hybrid1") {
-            return ccvs_vs_list[i].out_port_id;
-          }
-        }
-      }
-    }
-  }
-
-  // variable declaration
-  var resistor_list = [];
-  var curr_src_list = [];
-  var volt_src_list = [];
-  var vccs_list = [];
-  var vcvs_list = [];
-  var cccs_gen_list = [];
-  var cccs_vs_list = [];
-  var ccvs_gen_list = [];
-  var ccvs_vs_list = [];
-
-  var connection_list = [];
-  var element_id_list = [];
-  var element_type_list = [];
-  var connection_id_list = [];
-  var raw_nodes_list = [];
-
   // Pushing each elements to the list as a class
   circuit.forEach((ele) => {
     if (ele["type"] == "Resistor") {
@@ -779,82 +847,8 @@ function simulate() {
       connection_id_list.push(ele["id"]);
     }
   });
-  function generate_node_list() {
-    var nodes_list = [];
-    var added_list = [];
-    var cnt = 1;
-    connection_list.forEach((conn) => {
-      if (nodes_list.length == 0) {
-        nodes_list.push([0, [conn.src_node, conn.tar_node]]);
-        added_list.push(conn.src_node);
-        added_list.push(conn.tar_node);
-      } else if (
-        added_list.includes(conn.src_node) == false &&
-        added_list.includes(conn.tar_node)
-      ) {
-        nodes_list.forEach((n) => {
-          if (n[1].includes(conn.tar_node)) {
-            n[1].push(conn.src_node);
-            added_list.push(conn.src_node);
-          }
-        });
-      } else if (
-        added_list.includes(conn.tar_node) == false &&
-        added_list.includes(conn.src_node)
-      ) {
-        nodes_list.forEach((n) => {
-          if (n[1].includes(conn.src_node)) {
-            n[1].push(conn.tar_node);
-            added_list.push(conn.tar_node);
-          }
-        });
-      } else {
-        nodes_list.push([cnt, [conn.src_node, conn.tar_node]]);
-        added_list.push(conn.src_node);
-        added_list.push(conn.tar_node);
-        cnt += 1;
-      }
-    });
-    for (var i = 0; i < nodes_list.length; i++) {
-      for (var j = 0; j < nodes_list.length - i - 1; j++) {
-        if (nodes_list[j][1].length > nodes_list[j + 1][1].length) {
-          var temp = nodes_list[j];
-          nodes_list[j] = nodes_list[j + 1];
-          nodes_list[j + 1] = temp;
-        }
-      }
-    }
-    nodes_list.reverse();
-    for (var i = 0; i < nodes_list.length; i++) {
-      nodes_list[i][0] = i;
-    }
-    return nodes_list;
-  }
-  nodes_list = generate_node_list();
-  //  It is the one that contains the final mapping of the number of nodes
 
-  function return_node_num_from_port_id(port_id) {
-    for (var i = 0; i < nodes_list.length; i++) {
-      if (nodes_list[i][1].includes(port_id)) {
-        return nodes_list[i][0];
-      }
-    }
-  }
-  function ret_src_tar_node_from_conn_label(text) {
-    for (var i = 0; i < connection_list.length; i++) {
-      if (connection_list[i].label_text == text) {
-        return [connection_list[i].src_node, connection_list[i].tar_node];
-      }
-    }
-  }
-  function ret_node_m_or_n(text) {
-    var res = ret_src_tar_node_from_conn_label(text);
-    var p1 = return_node_num_from_port_id(res[0]);
-    var p2 = return_node_num_from_port_id(res[1]);
-    if (p1 == p2) {
-      return p1;
-    }
-  }
+  nodes_list = generate_node_list();
   var to_change_list = [];
   for (var i = 0; i < connection_list.length; i++) {
     try {
@@ -865,10 +859,6 @@ function simulate() {
     } catch (error) {
       console.log(error);
     }
-    // try:
-    //   to_change_list.append((int(conn.label_text),conn.tar_node))
-    // except ValueError:
-    //   pass
   }
   resistor_list.forEach((ele) => {
     ele.node_k = return_node_num_from_port_id(ele.inp_port_id);
@@ -926,154 +916,9 @@ function simulate() {
     ele.node_m = parseInt(ele.cont_high_node);
     ele.node_n = parseInt(ele.cont_low_node);
   });
-
-  for (var i = 0; i < to_change_list.length; i++) {
-    for (var j = 0; j < vccs_list.length; j++) {
-      if (
-        parseInt(vccs_list[j].node_m) == to_change_list[i][0] &&
-        vccs_list[j].m_changed == 0
-      ) {
-        vccs_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        vccs_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(vccs_list[j].node_n) == to_change_list[i][0] &&
-        vccs_list[j].n_changed == 0
-      ) {
-        vccs_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        vccs_list[j].n_changed = 1;
-      }
-    }
-    for (var j = 0; j < vcvs_list.length; j++) {
-      if (
-        parseInt(vcvs_list[j].node_m) == to_change_list[i][0] &&
-        vcvs_list[j].m_changed == 0
-      ) {
-        vcvs_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        vcvs_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(vcvs_list[j].node_n) == to_change_list[i][0] &&
-        vcvs_list[j].n_changed == 0
-      ) {
-        vcvs_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        vcvs_list[j].n_changed = 1;
-      }
-    }
-    for (var j = 0; j < cccs_gen_list.length; j++) {
-      if (
-        parseInt(cccs_gen_list[j].node_m) == to_change_list[i][0] &&
-        cccs_gen_list[j].m_changed == 0
-      ) {
-        cccs_gen_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        cccs_gen_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(cccs_gen_list[j].node_n) == to_change_list[i][0] &&
-        cccs_gen_list[j].n_changed == 0
-      ) {
-        cccs_gen_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        cccs_gen_list[j].n_changed = 1;
-      }
-    }
-    for (var j = 0; j < cccs_vs_list.length; j++) {
-      if (
-        parseInt(cccs_vs_list[j].node_m) == to_change_list[i][0] &&
-        cccs_vs_list[j].m_changed == 0
-      ) {
-        cccs_vs_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        cccs_vs_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(cccs_vs_list[j].node_n) == to_change_list[i][0] &&
-        cccs_vs_list[j].n_changed == 0
-      ) {
-        cccs_vs_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        cccs_vs_list[j].n_changed = 1;
-      }
-    }
-    for (var j = 0; j < ccvs_gen_list.length; j++) {
-      if (
-        parseInt(ccvs_gen_list[j].node_m) == to_change_list[i][0] &&
-        ccvs_gen_list[j].m_changed == 0
-      ) {
-        ccvs_gen_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        ccvs_gen_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(ccvs_gen_list[j].node_n) == to_change_list[i][0] &&
-        ccvs_gen_list[j].n_changed == 0
-      ) {
-        ccvs_gen_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        ccvs_gen_list[j].n_changed = 1;
-      }
-    }
-    for (var j = 0; j < ccvs_vs_list.length; j++) {
-      if (
-        parseInt(ccvs_vs_list[j].node_m) == to_change_list[i][0] &&
-        ccvs_vs_list[j].m_changed == 0
-      ) {
-        ccvs_vs_list[j].node_m = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        ccvs_vs_list[j].m_changed = 1;
-      }
-      if (
-        parseInt(ccvs_vs_list[j].node_n) == to_change_list[i][0] &&
-        ccvs_vs_list[j].n_changed == 0
-      ) {
-        ccvs_vs_list[j].node_n = return_node_num_from_port_id(
-          to_change_list[i][1]
-        );
-        ccvs_vs_list[j].n_changed = 1;
-      }
-    }
-  }
-  console.log(app.view);
-
-  function update_conn_label() {
-    for (var i = 0; i < connection_list.length; i++) {
-      connection_list[i].label_text = return_node_num_from_port_id(
-        connection_list[i].src_node
-      );
-    }
-
-    app.view.lines.data.forEach((ele) => {
-      connection_list.forEach((conn) => {
-        if (conn.conn_id == ele["id"]) {
-          ele.label.setText(conn.label_text);
-        }
-      });
-    });
-  }
-  update_conn_label();
-  updatePreview(app.view);
-  displayJSON(app.view);
-  console.log(app.view);
-
+  // Input validation
   var nodes = nodes_list.length - 1;
 
-  // Input validation
   if (
     element_id_list.length == 0 ||
     nodes_list.length == 0 ||
@@ -1083,6 +928,8 @@ function simulate() {
   } else {
     for (var i = 0; i < resistor_list.length; i++) {
       if (parseFloat(resistor_list[i].label) != resistor_list[i].label) {
+        console.log(parseFloat(resistor_list[i].label));
+        console.log(resistor_list[i].label);
         return alert(
           "You haven't entered correct information for one of the resistor"
         );
@@ -1285,9 +1132,159 @@ function simulate() {
       }
     }
   }
+  for (var i = 0; i < to_change_list.length; i++) {
+    for (var j = 0; j < vccs_list.length; j++) {
+      if (
+        parseInt(vccs_list[j].node_m) == to_change_list[i][0] &&
+        vccs_list[j].m_changed == 0
+      ) {
+        vccs_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        vccs_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(vccs_list[j].node_n) == to_change_list[i][0] &&
+        vccs_list[j].n_changed == 0
+      ) {
+        vccs_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        vccs_list[j].n_changed = 1;
+      }
+    }
+    for (var j = 0; j < vcvs_list.length; j++) {
+      if (
+        parseInt(vcvs_list[j].node_m) == to_change_list[i][0] &&
+        vcvs_list[j].m_changed == 0
+      ) {
+        vcvs_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        vcvs_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(vcvs_list[j].node_n) == to_change_list[i][0] &&
+        vcvs_list[j].n_changed == 0
+      ) {
+        vcvs_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        vcvs_list[j].n_changed = 1;
+      }
+    }
+    for (var j = 0; j < cccs_gen_list.length; j++) {
+      if (
+        parseInt(cccs_gen_list[j].node_m) == to_change_list[i][0] &&
+        cccs_gen_list[j].m_changed == 0
+      ) {
+        cccs_gen_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        cccs_gen_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(cccs_gen_list[j].node_n) == to_change_list[i][0] &&
+        cccs_gen_list[j].n_changed == 0
+      ) {
+        cccs_gen_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        cccs_gen_list[j].n_changed = 1;
+      }
+    }
+    for (var j = 0; j < cccs_vs_list.length; j++) {
+      if (
+        parseInt(cccs_vs_list[j].node_m) == to_change_list[i][0] &&
+        cccs_vs_list[j].m_changed == 0
+      ) {
+        cccs_vs_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        cccs_vs_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(cccs_vs_list[j].node_n) == to_change_list[i][0] &&
+        cccs_vs_list[j].n_changed == 0
+      ) {
+        cccs_vs_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        cccs_vs_list[j].n_changed = 1;
+      }
+    }
+    for (var j = 0; j < ccvs_gen_list.length; j++) {
+      if (
+        parseInt(ccvs_gen_list[j].node_m) == to_change_list[i][0] &&
+        ccvs_gen_list[j].m_changed == 0
+      ) {
+        ccvs_gen_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        ccvs_gen_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(ccvs_gen_list[j].node_n) == to_change_list[i][0] &&
+        ccvs_gen_list[j].n_changed == 0
+      ) {
+        ccvs_gen_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        ccvs_gen_list[j].n_changed = 1;
+      }
+    }
+    for (var j = 0; j < ccvs_vs_list.length; j++) {
+      if (
+        parseInt(ccvs_vs_list[j].node_m) == to_change_list[i][0] &&
+        ccvs_vs_list[j].m_changed == 0
+      ) {
+        ccvs_vs_list[j].node_m = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        ccvs_vs_list[j].m_changed = 1;
+      }
+      if (
+        parseInt(ccvs_vs_list[j].node_n) == to_change_list[i][0] &&
+        ccvs_vs_list[j].n_changed == 0
+      ) {
+        ccvs_vs_list[j].node_n = return_node_num_from_port_id(
+          to_change_list[i][1]
+        );
+        ccvs_vs_list[j].n_changed = 1;
+      }
+    }
+  }
+
+  function update_conn_label() {
+    for (var i = 0; i < connection_list.length; i++) {
+      connection_list[i].label_text = return_node_num_from_port_id(
+        connection_list[i].src_node
+      );
+    }
+
+    app.view.lines.data.forEach((ele) => {
+      connection_list.forEach((conn) => {
+        if (conn.conn_id == ele["id"]) {
+          ele.label.setText(conn.label_text);
+        }
+      });
+    });
+  }
+  update_conn_label();
+  updatePreview(app.view);
+  displayJSON(app.view);
+}
+function simulate() {
+  // functionining the classes for the connection, resistor, current source, voltage source, controlled voltage and controlled current source
+
+  //  It is the one that contains the final mapping of the number of nodes
+  nodeGenerate();
+
+  var nodes = nodes_list.length - 1;
 
   // Create variables for the matrix and process for each element.
   var size = parseInt(nodes + volt_src_list.length + vcvs_list.length);
+  console.log("volt_src_list.length: ", volt_src_list.length);
   var cond_matrix = Array(size)
     .fill()
     .map(() => Array(size).fill(0));
@@ -1782,7 +1779,7 @@ function simulate() {
       cond_matrix[n_k][n_k] += conductance;
     }
   }
-
+  console.log(cond_matrix);
   cond_matrix_inv = math.inv(cond_matrix);
   var output_matrix = math.multiply(cond_matrix_inv, curr_matrix);
 
@@ -1820,11 +1817,7 @@ function simulate() {
   $(".mask").addClass("active");
 
   function update_cont_srcs() {
-    console.log("Goes");
-    console.log("app.view.figures.data", app.view.figures.data);
     app.view.figures.data.forEach((ele) => {
-      console.log("ele", ele);
-      console.log("ele_label", ele.label.getText());
       if (ele.cssClass == "VCCS") {
         vccs_list.forEach((e) => {
           if (e.id == ele.id) {

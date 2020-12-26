@@ -64,6 +64,10 @@ example.Toolbar = Class.extend({
         }, this)
       )
       .button("option", "disabled", true);
+    this.nodeGenerate = $(
+      "<button type='button' class='show btn-primary btn-lg px-3'  aria-haspopup='true' onClick='nodeGenerate()' >Generate Node No.</button>"
+    );
+    this.html.append(this.nodeGenerate);
     this.submitButton = $(
       "<button type='button' class='show btn-primary btn-lg px-3'  aria-haspopup='true' onClick='simulate()' ><img src='.././css/icons/play.png' alt='play' /> Simulate</button>"
     );

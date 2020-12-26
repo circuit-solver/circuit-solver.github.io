@@ -157,12 +157,17 @@
           src="https://img.icons8.com/ios-glyphs/30/000000/macos-close.png"
         />
       </button>
+      <!-- <p>
+        Each connection has been assigned to a node number.
+      </p> -->
       <div
         style="
           overflow-y: auto !important;
           display: flex !important;
           justify-content: center;
           align-items: center;
+          height: 550;
+          padding-top: 5%;
         "
       >
         <img
@@ -222,10 +227,15 @@
         </li>
         <li>Double click the element Label to edit the value</li>
         <li>
-          To name the node is optional unless there are controlling sources
+          <!-- To name the node is optional unless there are controlling sources
           since we need to identify where controlling factor flows. After
-          simulation, node numbering is automatically done to all the nodes.
+          simulation, node numbering is automatically done to all the nodes. -->
+          Once circuit is made, click on <strong>Generate Node No</strong> on
+          the toolbar to automatically generate the node values. You can then
+          use use this convention to set controlling sources high and low
+          values.
         </li>
+
         <li>
           For controlling sources for example <br /><img
             style="width: 200px"
@@ -238,6 +248,15 @@
           The input box in the left "High" represents the node high of the
           controlling element whereas the input box in the right "Low"
           represents the node low of the controlling element.
+        </li>
+        <li>
+          To undo/redo/delete an element, simply click that element use options
+          from the toolbar.
+        </li>
+        <li>This algorithm is made using Modified Nodal Analysis Method.</li>
+        <li>
+          If there are controlling sources, then the values of High and Low are
+          changed to match with the automatic node numbering.
         </li>
       </ol>
     </div>
@@ -255,6 +274,7 @@
         border: 1px solid gray;
       "
     ></pre>
+
     <script src="../src/index.js"></script>
   </body>
 </html>
