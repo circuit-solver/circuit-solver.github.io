@@ -534,57 +534,7 @@ function ret_node_m_or_n(text) {
     return p1;
   }
 }
-function generate_node_list() {
-  var nodes_list = [];
-  var added_list = [];
-  var cnt = 1;
-  connection_list.forEach((conn) => {
-    if (nodes_list.length == 0) {
-      nodes_list.push([0, [conn.src_node, conn.tar_node]]);
-      added_list.push(conn.src_node);
-      added_list.push(conn.tar_node);
-    } else if (
-      added_list.includes(conn.src_node) == false &&
-      added_list.includes(conn.tar_node)
-    ) {
-      nodes_list.forEach((n) => {
-        if (n[1].includes(conn.tar_node)) {
-          n[1].push(conn.src_node);
-          added_list.push(conn.src_node);
-        }
-      });
-    } else if (
-      added_list.includes(conn.tar_node) == false &&
-      added_list.includes(conn.src_node)
-    ) {
-      nodes_list.forEach((n) => {
-        if (n[1].includes(conn.src_node)) {
-          n[1].push(conn.tar_node);
-          added_list.push(conn.tar_node);
-        }
-      });
-    } else {
-      nodes_list.push([cnt, [conn.src_node, conn.tar_node]]);
-      added_list.push(conn.src_node);
-      added_list.push(conn.tar_node);
-      cnt += 1;
-    }
-  });
-  for (var i = 0; i < nodes_list.length; i++) {
-    for (var j = 0; j < nodes_list.length - i - 1; j++) {
-      if (nodes_list[j][1].length > nodes_list[j + 1][1].length) {
-        var temp = nodes_list[j];
-        nodes_list[j] = nodes_list[j + 1];
-        nodes_list[j + 1] = temp;
-      }
-    }
-  }
-  nodes_list.reverse();
-  for (var i = 0; i < nodes_list.length; i++) {
-    nodes_list[i][0] = i;
-  }
-  return nodes_list;
-}
+
 function nodeGenerate() {
   // variable declaration
   resistor_list = [];
@@ -847,9 +797,58 @@ function nodeGenerate() {
       connection_id_list.push(ele["id"]);
     }
   });
-
+  function generate_node_list() {
+    var nodes_list = [];
+    var added_list = [];
+    var cnt = 1;
+    connection_list.forEach((conn) => {
+      if (nodes_list.length == 0) {
+        nodes_list.push([0, [conn.src_node, conn.tar_node]]);
+        added_list.push(conn.src_node);
+        added_list.push(conn.tar_node);
+      } else if (
+        added_list.includes(conn.src_node) == false &&
+        added_list.includes(conn.tar_node)
+      ) {
+        nodes_list.forEach((n) => {
+          if (n[1].includes(conn.tar_node)) {
+            n[1].push(conn.src_node);
+            added_list.push(conn.src_node);
+          }
+        });
+      } else if (
+        added_list.includes(conn.tar_node) == false &&
+        added_list.includes(conn.src_node)
+      ) {
+        nodes_list.forEach((n) => {
+          if (n[1].includes(conn.src_node)) {
+            n[1].push(conn.tar_node);
+            added_list.push(conn.tar_node);
+          }
+        });
+      } else {
+        nodes_list.push([cnt, [conn.src_node, conn.tar_node]]);
+        added_list.push(conn.src_node);
+        added_list.push(conn.tar_node);
+        cnt += 1;
+      }
+    });
+    for (var i = 0; i < nodes_list.length; i++) {
+      for (var j = 0; j < nodes_list.length - i - 1; j++) {
+        if (nodes_list[j][1].length > nodes_list[j + 1][1].length) {
+          var temp = nodes_list[j];
+          nodes_list[j] = nodes_list[j + 1];
+          nodes_list[j + 1] = temp;
+        }
+      }
+    }
+    nodes_list.reverse();
+    for (var i = 0; i < nodes_list.length; i++) {
+      nodes_list[i][0] = i;
+    }
+    return nodes_list;
+  }
   nodes_list = generate_node_list();
-  console.log(nodes_list);
   // var to_change_list = [];
   // for (var i = 0; i < connection_list.length; i++) {
   //   try {
@@ -929,8 +928,6 @@ function nodeGenerate() {
   } else {
     for (var i = 0; i < resistor_list.length; i++) {
       if (parseFloat(resistor_list[i].label) != resistor_list[i].label) {
-        console.log(parseFloat(resistor_list[i].label));
-        console.log(resistor_list[i].label);
         return alert(
           "You haven't entered correct information for one of the resistor"
         );
@@ -1143,7 +1140,7 @@ function nodeGenerate() {
 
     app.view.lines.data.forEach((ele) => {
       connection_list.forEach((conn) => {
-        if (conn.conn_id == ele["id"]) {
+        if (conn.conn_id == ele.id) {
           ele.label.setText(conn.label_text);
         }
       });
@@ -1296,7 +1293,6 @@ function simulate() {
 
   // Create variables for the matrix and process for each element.
   var size = parseInt(nodes + volt_src_list.length + vcvs_list.length);
-  console.log("volt_src_list.length: ", volt_src_list.length);
   var cond_matrix = Array(size)
     .fill()
     .map(() => Array(size).fill(0));
