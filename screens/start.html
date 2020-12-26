@@ -210,18 +210,20 @@
       </button>
       <h1>Instructions</h1>
       <ol>
-        <li>Drag and drop the elements from the left to the canvas</li>
-        <li>Double click the element to rotate 90 degrees</li>
+        <li>
+          Drag and drop the elements from the components palatte to the canvas
+        </li>
+        <li>Double click the element to rotate 90 degrees clockwise</li>
         <li>
           Connection of ports:
           <ul>
             <li>
-              Click the ports from each element one after the other, it
-              automatically connects (OR)
+              Click the port on first element and click the port on second
+              element, it automatically connects (OR)
             </li>
             <li>
-              You can drag from one port and drop to the destination port(doesnt
-              work on mobile browser)
+              You can drag the first port to the second port of different
+              element(doesnt work on mobile browser)
             </li>
           </ul>
         </li>
@@ -232,7 +234,7 @@
           simulation, node numbering is automatically done to all the nodes. -->
           Once circuit is made, click on <strong>Generate Node No</strong> on
           the toolbar to automatically generate the node values. You can then
-          use use this convention to set controlling sources high and low
+          use use this node numbering to set controlling sources high and low
           values.
         </li>
 
@@ -248,15 +250,23 @@
           The input box in the left "High" represents the node high of the
           controlling element whereas the input box in the right "Low"
           represents the node low of the controlling element.
+          <br />
+          In case if current being the controlling variable, the high
+          corresponds to the node from which it flows, and low corresponds to
+          the node to which the current flows.
+          <br />
+          In case if voltage being the controlling variable, the high
+          corresponds to the node at which the postive is connected, the low
+          corresponds to the node at which the negative is connected.
         </li>
         <li>
-          To undo/redo/delete an element, simply click that element use options
-          from the toolbar.
+          To undo/redo/delete an element, simply click that element and use
+          options from the toolbar.
         </li>
-        <li>This algorithm is made using Modified Nodal Analysis Method.</li>
         <li>
           If there are controlling sources, then the values of High and Low are
-          changed to match with the automatic node numbering.
+          changed to match with the automatic node numbering when you click
+          simulate.
         </li>
       </ol>
     </div>
