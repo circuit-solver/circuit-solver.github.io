@@ -60,6 +60,8 @@
     </nav>
 
     <div id="alerts"></div>
+    <main style="background-color: lavender; padding-bottom: 100px;">
+
     <div class="feedback" style="padding-top: 5rem">
       <h2>Feedback</h2>
       <form name="submit-to-google-sheet" style="padding-top: 2rem">
@@ -89,8 +91,19 @@
         <button class="btn btn-primary" style="margin-top: 2rem">Submit</button>
       </form>
     </div>
+    </main>
+    <footer class="footer" style="background-color: aliceblue; padding-bottom: 20px; margin-top: 20px;">
+      <h5 class="text-center footer-head py-3">
+        Open Source with &#10084 on <a href="https://github.com/circuit-solver/circuit-solver.github.io/blob/main/src/draw2d.js">Github</a>
+      </h5>
+      <div style="display: flex; justify-content: space-around;">
+      <a href="./screens/contact.html" style=" color: gray !important;">Contact</a>
+    <a style=" color: gray !important;" href="#">Source Code</a></div>
+    </footer>
 
     <script>
+      
+
       const scriptURL =
         "https://script.google.com/macros/s/AKfycbxOpzz9BUueI5Pd_YXib8wkUwpiWG-IRVII-iyNcFV3BUWvj7IS/exec";
       const form = document.forms["submit-to-google-sheet"];
