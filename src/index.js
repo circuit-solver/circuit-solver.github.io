@@ -74,7 +74,7 @@ var createConnection = function (sourcePort, targetPort) {
   return c;
 };
 
-// document.getElementById("json").style.display = "none";
+document.getElementById("json").style.display = "none";
 
 function displayJSON(canvas) {
   var writer = new draw2d.io.json.Writer();
@@ -849,17 +849,18 @@ function nodeGenerate() {
   });
 
   nodes_list = generate_node_list();
-  var to_change_list = [];
-  for (var i = 0; i < connection_list.length; i++) {
-    try {
-      to_change_list.push([
-        parseInt(connection_list[i].label_text),
-        connection_list[i].tar_node,
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  console.log(nodes_list);
+  // var to_change_list = [];
+  // for (var i = 0; i < connection_list.length; i++) {
+  //   try {
+  //     to_change_list.push([
+  //       parseInt(connection_list[i].label_text),
+  //       connection_list[i].tar_node,
+  //     ]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   resistor_list.forEach((ele) => {
     ele.node_k = return_node_num_from_port_id(ele.inp_port_id);
     ele.node_l = return_node_num_from_port_id(ele.out_port_id);
@@ -1132,6 +1133,42 @@ function nodeGenerate() {
       }
     }
   }
+
+  function update_conn_label() {
+    for (var i = 0; i < connection_list.length; i++) {
+      connection_list[i].label_text = return_node_num_from_port_id(
+        connection_list[i].src_node
+      );
+    }
+
+    app.view.lines.data.forEach((ele) => {
+      connection_list.forEach((conn) => {
+        if (conn.conn_id == ele["id"]) {
+          ele.label.setText(conn.label_text);
+        }
+      });
+    });
+  }
+  update_conn_label();
+  updatePreview(app.view);
+  displayJSON(app.view);
+}
+function simulate() {
+  // functionining the classes for the connection, resistor, current source, voltage source, controlled voltage and controlled current source
+
+  //  It is the one that contains the final mapping of the number of nodes
+  nodeGenerate();
+  var to_change_list = [];
+  for (var i = 0; i < connection_list.length; i++) {
+    try {
+      to_change_list.push([
+        parseInt(connection_list[i].label_text),
+        connection_list[i].tar_node,
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   for (var i = 0; i < to_change_list.length; i++) {
     for (var j = 0; j < vccs_list.length; j++) {
       if (
@@ -1254,31 +1291,6 @@ function nodeGenerate() {
       }
     }
   }
-
-  function update_conn_label() {
-    for (var i = 0; i < connection_list.length; i++) {
-      connection_list[i].label_text = return_node_num_from_port_id(
-        connection_list[i].src_node
-      );
-    }
-
-    app.view.lines.data.forEach((ele) => {
-      connection_list.forEach((conn) => {
-        if (conn.conn_id == ele["id"]) {
-          ele.label.setText(conn.label_text);
-        }
-      });
-    });
-  }
-  update_conn_label();
-  updatePreview(app.view);
-  displayJSON(app.view);
-}
-function simulate() {
-  // functionining the classes for the connection, resistor, current source, voltage source, controlled voltage and controlled current source
-
-  //  It is the one that contains the final mapping of the number of nodes
-  nodeGenerate();
 
   var nodes = nodes_list.length - 1;
 
