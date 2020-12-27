@@ -1,3 +1,4 @@
+// Draw2d canvas implementation and policies like drag/drop
 document.addEventListener("DOMContentLoaded", function () {
   // This function loads first
 
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     closeModal(".mask-docs");
   });
   $(".again").on("click", function () {
-    closeModal();
+    closeModal(".mask");
   });
 
   $(document).keyup(function (e) {
@@ -74,18 +75,17 @@ var createConnection = function (sourcePort, targetPort) {
   return c;
 };
 
-// document.getElementById("json").style.display = "none";
+document.getElementById("json").style.display = "none";
 
 function displayJSON(canvas) {
   var writer = new draw2d.io.json.Writer();
   writer.marshal(canvas, function (json) {
     $("#json").text(JSON.stringify(json, null, 2));
   });
-  // Click function for show the Modal
 }
 function updatePreview(canvas) {
   // convert the canvas into a PNG image source string
-  //
+
   var xCoords = [];
   var yCoords = [];
   canvas.getFigures().each(function (i, f) {
@@ -108,6 +108,7 @@ function updatePreview(canvas) {
   );
 }
 
+// Classes for all elements and connections
 class connection {
   constructor(conn_id, label_id, label_text, src_node, tar_node) {
     this.conn_id = conn_id;
@@ -797,42 +798,51 @@ function nodeGenerate() {
       connection_id_list.push(ele["id"]);
     }
   });
+
   function generate_node_list() {
-    var nodes_list = [];
-    var added_list = [];
-    var cnt = 1;
+    nodes_list = [];
     connection_list.forEach((conn) => {
-      if (nodes_list.length == 0) {
-        nodes_list.push([0, [conn.src_node, conn.tar_node]]);
-        added_list.push(conn.src_node);
-        added_list.push(conn.tar_node);
-      } else if (
-        added_list.includes(conn.src_node) == false &&
-        added_list.includes(conn.tar_node)
-      ) {
-        nodes_list.forEach((n) => {
-          if (n[1].includes(conn.tar_node)) {
-            n[1].push(conn.src_node);
-            added_list.push(conn.src_node);
-          }
-        });
-      } else if (
-        added_list.includes(conn.tar_node) == false &&
-        added_list.includes(conn.src_node)
-      ) {
-        nodes_list.forEach((n) => {
-          if (n[1].includes(conn.src_node)) {
-            n[1].push(conn.tar_node);
-            added_list.push(conn.tar_node);
-          }
-        });
-      } else {
-        nodes_list.push([cnt, [conn.src_node, conn.tar_node]]);
-        added_list.push(conn.src_node);
-        added_list.push(conn.tar_node);
-        cnt += 1;
-      }
+      nodes_list.push([conn.src_node, conn.tar_node]);
     });
+    var rem_list = [];
+    var iter = 1;
+
+    while (rem_list != [] || iter == 1) {
+      for (var i = 0; i < nodes_list.length; i++) {
+        for (var j = i + 1; j < nodes_list.length; j++) {
+          if (i != j && !rem_list.includes(j)) {
+            if (
+              nodes_list[i].includes(nodes_list[j][0]) ||
+              nodes_list[i].includes(nodes_list[j][1])
+            ) {
+              nodes_list[i] = nodes_list[i].concat(nodes_list[j]);
+              rem_list.push(j);
+            }
+          }
+        }
+      }
+
+      if (rem_list.length === 0) {
+        iter = 0;
+        break;
+      } else {
+        var new_nodes_list = [];
+        for (var idx = 0; idx < nodes_list.length; idx++) {
+          if (!rem_list.includes(idx)) {
+            new_nodes_list.push(nodes_list[idx]);
+          }
+        }
+        rem_list = [];
+        nodes_list = new_nodes_list;
+      }
+    }
+    for (var i = 0; i < nodes_list.length; i++) {
+      var l = [];
+      l.push(nodes_list[i].length);
+      l.push(nodes_list[i]);
+      nodes_list[i] = l;
+    }
+
     for (var i = 0; i < nodes_list.length; i++) {
       for (var j = 0; j < nodes_list.length - i - 1; j++) {
         if (nodes_list[j][1].length > nodes_list[j + 1][1].length) {
@@ -849,17 +859,7 @@ function nodeGenerate() {
     return nodes_list;
   }
   nodes_list = generate_node_list();
-  // var to_change_list = [];
-  // for (var i = 0; i < connection_list.length; i++) {
-  //   try {
-  //     to_change_list.push([
-  //       parseInt(connection_list[i].label_text),
-  //       connection_list[i].tar_node,
-  //     ]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+
   resistor_list.forEach((ele) => {
     ele.node_k = return_node_num_from_port_id(ele.inp_port_id);
     ele.node_l = return_node_num_from_port_id(ele.out_port_id);
@@ -1137,7 +1137,6 @@ function nodeGenerate() {
         connection_list[i].src_node
       );
     }
-
     app.view.lines.data.forEach((ele) => {
       connection_list.forEach((conn) => {
         if (conn.conn_id == ele.id) {
@@ -1146,10 +1145,12 @@ function nodeGenerate() {
       });
     });
   }
+
   update_conn_label();
   updatePreview(app.view);
   displayJSON(app.view);
 }
+
 function simulate() {
   // functionining the classes for the connection, resistor, current source, voltage source, controlled voltage and controlled current source
 
@@ -1787,7 +1788,6 @@ function simulate() {
       cond_matrix[n_k][n_k] += conductance;
     }
   }
-  console.log(cond_matrix);
   cond_matrix_inv = math.inv(cond_matrix);
   var output_matrix = math.multiply(cond_matrix_inv, curr_matrix);
 
@@ -1825,7 +1825,11 @@ function simulate() {
   $(".mask").addClass("active");
 
   function update_cont_srcs() {
+    console.log("Goes");
+    console.log("app.view.figures.data", app.view.figures.data);
     app.view.figures.data.forEach((ele) => {
+      console.log("ele", ele);
+      console.log("ele_label", ele.label.getText());
       if (ele.cssClass == "VCCS") {
         vccs_list.forEach((e) => {
           if (e.id == ele.id) {
@@ -1859,6 +1863,4 @@ function simulate() {
   }
   update_cont_srcs();
   updatePreview(app.view);
-
-  console.log("final", app.view);
 }

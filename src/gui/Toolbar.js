@@ -16,11 +16,18 @@ example.Toolbar = Class.extend({
 
     // Inject the UNDO Button and the callbacks
     //
-
-    this.undoButton = $(
-      "<button class='btn btn-light'><img src='.././css/icons/undo.png' alt='undo' /> Undo</button>"
+    this.div = $(
+      "<div class='tool' style='display:flex; justify-content:space-evenly; margin: auto; width: 1000px; max-width: 90% '></div>"
     );
-    this.html.append(this.undoButton);
+    this.html.append(this.div);
+    this.docsButton = $(
+      "<button type='button' style='margin-left:15px' class='show-docs btn-info btn-lg px-3 mx-6'  aria-haspopup='true' >Instructions</button>"
+    );
+    $(".tool").append(this.docsButton);
+    this.undoButton = $(
+      "<button class='btn btn-light' style='border-width: 4px; border-color:black; border-style:solid'><img src='.././css/icons/undo.png' alt='undo' /> Undo</button>"
+    );
+    $(".tool").append(this.undoButton);
     this.undoButton
       .button()
       .click(
@@ -33,9 +40,9 @@ example.Toolbar = Class.extend({
     // Inject the REDO Button and the callback
     //
     this.redoButton = $(
-      "<button class='btn btn-light'><img src='.././css/icons/redo.png' alt='redo' /> Redo</button>"
+      "<button class='btn btn-light' style='border-width: 4px; border-color:black; border-style:solid'><img src='.././css/icons/redo.png' alt='redo' /> Redo</button>"
     );
-    this.html.append(this.redoButton);
+    $(".tool").append(this.redoButton);
     this.redoButton
       .button()
       .click(
@@ -45,15 +52,12 @@ example.Toolbar = Class.extend({
       )
       .button("option", "disabled", true);
 
-    this.delimiter = $("<span class='toolbar_delimiter'>&nbsp;</span>");
-    this.html.append(this.delimiter);
-
     // Inject the DELETE Button
     //
     this.deleteButton = $(
-      "<button class='btn btn-light'><img src='.././css/icons/delete.png' alt='delete' /> Delete</button>"
+      "<button class='btn btn-light' style='border-width: 4px; border-color:black; border-style:solid'><img src='.././css/icons/delete.png' alt='delete' /> Delete</button>"
     );
-    this.html.append(this.deleteButton);
+    $(".tool").append(this.deleteButton);
     this.deleteButton
       .button()
       .click(
@@ -65,17 +69,13 @@ example.Toolbar = Class.extend({
       )
       .button("option", "disabled", true);
     this.nodeGenerate = $(
-      "<button type='button' class='show btn-primary btn-lg px-3'  aria-haspopup='true' onClick='nodeGenerate()' >Generate Node No.</button>"
+      "<button type='button' class='show btn-primary btn-lg px-3 '  aria-haspopup='true' onClick='nodeGenerate()' >Generate Node No.</button>"
     );
-    this.html.append(this.nodeGenerate);
+    $(".tool").append(this.nodeGenerate);
     this.submitButton = $(
       "<button type='button' class='show btn-primary btn-lg px-3'  aria-haspopup='true' onClick='simulate()' ><img src='.././css/icons/play.png' alt='play' /> Simulate</button>"
     );
-    this.html.append(this.submitButton);
-    this.docsButton = $(
-      "<button type='button' style='margin-left:35px' class='show-docs btn-primary btn-lg px-3 mx-6'  aria-haspopup='true' >Instructions</button>"
-    );
-    this.html.append(this.docsButton);
+    $(".tool").append(this.submitButton);
   },
 
   /**

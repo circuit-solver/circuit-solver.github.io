@@ -31,12 +31,6 @@ example.Application = Class.extend({
         paneSelector: "#navbar",
       },
 
-      west: {
-        resizable: true,
-        closable: true,
-        resizeWhileDragging: true,
-        paneSelector: "#navigation",
-      },
       center: {
         resizable: true,
         closable: true,
@@ -54,6 +48,12 @@ example.Application = Class.extend({
         spacing_closed: 0,
         size: 50,
         paneSelector: "#toolbar",
+      },
+      west: {
+        resizable: true,
+        closable: true,
+        resizeWhileDragging: true,
+        paneSelector: "#navigation",
       },
       center: {
         resizable: false,
